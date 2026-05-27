@@ -23,13 +23,34 @@ In short: **It is a software engine that converts abstract math into a physicall
 
 ## Repository Architecture
 
-```text
-fpga-cad-flow/
-├── CMakeLists.txt           # Primary C++ build configuration
-├── include/                 # C++ Headers (.hpp)
-├── src/                     # C++ Implementation (.cpp)
-├── python/                  # Python visualization and diagnostic tools
-├── tests/                   # Unit tests for AST, DAG, and Routing components
-└── data/                    
-    ├── inputs/              # Benchmark circuits and logic definitions
-    └── outputs/             # Generated JSON routing states
+FPGA-CAD-Flow-Simulation-Framework/
+├── .gitignore               
+├── README.md                
+├── CMakeLists.txt           
+├── requirements.txt         
+│
+├── include/                 
+│   └── route/
+│       ├── rrg_node.hpp
+│       └── pathfinder.hpp
+│
+├── src/                     
+│   ├── main.cpp
+│   └── route/
+│       └── pathfinder.cpp
+│
+├── python/                  
+│   ├── requirements.txt
+│   ├── visualize_grid.py
+│   └── parse_metrics.py
+│
+├── tests/                   
+│   ├── test_parser.cpp
+│   └── test_router.cpp
+│
+├── data/                    
+│   ├── inputs/              
+│   └── outputs/             
+│
+└── docs/                    
+    └── architecture.md
