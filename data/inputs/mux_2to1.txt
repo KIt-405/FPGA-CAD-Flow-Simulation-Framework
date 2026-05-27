@@ -1,0 +1,1 @@
+(select_line AND data_in_1) OR (NOT select_line AND data_in_0)
