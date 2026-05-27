@@ -11,10 +11,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 # Tell the compiler where to find your .hpp header files
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-# Define the source files that need to be compiled
-# As you build out the parser and optimizer, add their .cpp files here
+# Define the source files that need to be compiled for the main engine
 set(SOURCE_FILES
     src/main.cpp
+    src/parse/ast_parser.cpp
     src/route/pathfinder.cpp
 )
 
@@ -22,8 +22,14 @@ set(SOURCE_FILES
 add_executable(fpga_engine ${SOURCE_FILES})
 
 # ---------------------------------------------------------
-# Optional: Setup for automated testing later
+# Automated Testing Setup
 # ---------------------------------------------------------
-# enable_testing()
-# add_executable(run_tests tests/test_router.cpp src/route/pathfinder.cpp)
-# add_test(NAME RouterTest COMMAND run_tests)
+enable_testing()
+
+# Compile the Parser tests (links the test file with the parser implementation)
+add_executable(test_parser tests/test_parser.cpp src/parse/ast_parser.cpp)
+add_test(NAME ParserTest COMMAND test_parser)
+
+# Compile the Router tests (links the test file with the router implementation)
+add_executable(test_router tests/test_router.cpp src/route/pathfinder.cpp)
+add_test(NAME RouterTest COMMAND test_router)
