@@ -53,3 +53,59 @@ def analyze_metrics(json_filepath):
     total_segments_used = len(wire_usage)
     over_capacity_segments = sum(1 for count in wire_usage.values() if count > channel_capacity)
     peak_congestion = max(wire_usage.values()) if wire_usage else 0
+
+    # 4. Print Terminal Report
+    print("="*45)
+    print(" 📊 FPGA CAD ROUTING METRICS REPORT")
+    print("="*45)
+    print(f"Fabric Size            : {grid_size}x{grid_size} CLBs")
+    print(f"Total Nets Routed      : {total_nets}")
+    print(f"Total Wirelength       : {total_wirelength} units")
+    print(f"Average Wirelength     : {avg_wirelength:.2f} units")
+    print(f"Critical Path (Max)    : {max_wirelength} units")
+    print("-" * 45)
+    print(f"Unique Grid Wires Used : {total_segments_used}")
+    print(f"Target Track Capacity  : {channel_capacity}")
+    print(f"Peak Wire Congestion   : {peak_congestion} nets/channel")
+    print("-" * 45)
+    
+    if over_capacity_segments > 0:
+        print(f"⚠️  ILLEGAL ROUTING: {over_capacity_segments} wire(s) over capacity!")
+    else:
+        print("✅ ROUTING FEASIBLE: 0 conflicts detected (100% Legal).")
+    print("="*45)
+
+    # 5. Visualize Wirelength Distribution
+    plot_wirelength_histogram(wirelengths)
+
+def plot_wirelength_histogram(wirelengths):
+    """
+    Generates a histogram plot showing the distribution of routing path lengths.
+    """
+    plt.figure(figsize=(8, 5))
+    
+    # Create bins for every integer length
+    min_len = min(wirelengths)
+    max_len = max(wirelengths)
+    bins = range(min_len, max_len + 2, 1)
+    
+    plt.hist(wirelengths, bins=bins, align='left', color='#4C72B0', edgecolor='black')
+    
+    plt.title("Net Wirelength Distribution", fontsize=14, fontweight='bold')
+    plt.xlabel("Wirelength (Number of channel segments)", fontsize=11)
+    plt.ylabel("Frequency (Number of Nets)", fontsize=11)
+    
+    # Ensure x-axis only shows integers
+    plt.xticks(range(min_len, max_len + 1))
+    plt.grid(axis='y', linestyle='--', alpha=0.7)
+    
+    plt.tight_layout()
+    plt.show()
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python3 parse_metrics.py <path_to_routing_state.json>")
+        sys.exit(1)
+        
+    json_path = sys.argv[1]
+    analyze_metrics(json_path)
