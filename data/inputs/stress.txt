@@ -1,0 +1,1 @@
+(A AND B) OR (C AND D) OR NOT (E AND F) OR (clk AND reset_n)
