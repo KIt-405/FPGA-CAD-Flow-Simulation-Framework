@@ -3,7 +3,6 @@
 #include <cassert>
 #include <string>
 
-// Helper to check node types safely
 void assert_node(const ASTNode* node, NodeType expected_type, const std::string& expected_name = "") {
     assert(node != nullptr);
     assert(node->type == expected_type);
@@ -23,7 +22,6 @@ void test_basic_parsing() {
 
 void test_operator_precedence() {
     std::cout << "[Test] Running test_operator_precedence (A OR B AND C)..." << std::endl;
-    // AND should be deeper in the tree than OR
     auto root = parse_rtl("A OR B AND C");
     
     assert_node(root.get(), NodeType::OR);
