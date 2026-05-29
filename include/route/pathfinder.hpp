@@ -5,10 +5,8 @@
 #include <algorithm>
 #include <limits>
 
-// Define the global routing graph declared in the header
 std::unordered_map<int, RRGNode> routing_grid;
 
-// Helper: Calculate Manhattan distance for A* Heuristic
 double manhattan_distance(int node_a, int node_b, int grid_size) {
     int x1 = node_a % grid_size;
     int y1 = node_a / grid_size;
@@ -20,7 +18,6 @@ double manhattan_distance(int node_a, int node_b, int grid_size) {
 void init_routing_grid(int grid_size, int channel_capacity) {
     routing_grid.clear();
 
-    // 1. Generate Nodes (A simple 2D mesh grid representing Switch Boxes/Wire Segments)
     for (int y = 0; y < grid_size; ++y) {
         for (int x = 0; x < grid_size; ++x) {
             int id = y * grid_size + x;
@@ -45,7 +42,6 @@ void init_routing_grid(int grid_size, int channel_capacity) {
               << " FPGA fabric with capacity " << channel_capacity << " per track.\n";
 }
 
-// Priority Queue element for A* Search
 struct PQElement {
     int node_id;
     double cost_from_start;
@@ -69,7 +65,6 @@ bool route_net(Net& net, int grid_size) {
         auto current = pq.top();
         pq.pop();
 
-        // Target reached! Backtrack to reconstruct the path
         if (current.node_id == net.sink_node_id) {
             int curr_trace = current.node_id;
             while (curr_trace != -1) {
