@@ -4,10 +4,7 @@ from collections import Counter
 import matplotlib.pyplot as plt
 
 def analyze_metrics(json_filepath):
-    """
-    Parses the routing state output from the C++ CAD engine and calculates
-    key EDA metrics such as total wirelength, critical path length, and congestion.
-    """
+
     print(f"Loading routing metrics from: {json_filepath}\n")
     
     try:
@@ -56,7 +53,7 @@ def analyze_metrics(json_filepath):
 
     # 4. Print Terminal Report
     print("="*45)
-    print(" 📊 FPGA CAD ROUTING METRICS REPORT")
+    print("  FPGA CAD ROUTING METRICS REPORT")
     print("="*45)
     print(f"Fabric Size            : {grid_size}x{grid_size} CLBs")
     print(f"Total Nets Routed      : {total_nets}")
@@ -70,21 +67,19 @@ def analyze_metrics(json_filepath):
     print("-" * 45)
     
     if over_capacity_segments > 0:
-        print(f"⚠️  ILLEGAL ROUTING: {over_capacity_segments} wire(s) over capacity!")
+        print(f"  ILLEGAL ROUTING: {over_capacity_segments} wire(s) over capacity!")
     else:
-        print("✅ ROUTING FEASIBLE: 0 conflicts detected (100% Legal).")
+        print(" ROUTING FEASIBLE: 0 conflicts detected (100% Legal).")
     print("="*45)
 
     # 5. Visualize Wirelength Distribution
     plot_wirelength_histogram(wirelengths)
 
 def plot_wirelength_histogram(wirelengths):
-    """
-    Generates a histogram plot showing the distribution of routing path lengths.
-    """
+
     plt.figure(figsize=(8, 5))
     
-    # Create bins for every integer length
+    
     min_len = min(wirelengths)
     max_len = max(wirelengths)
     bins = range(min_len, max_len + 2, 1)
@@ -95,7 +90,6 @@ def plot_wirelength_histogram(wirelengths):
     plt.xlabel("Wirelength (Number of channel segments)", fontsize=11)
     plt.ylabel("Frequency (Number of Nets)", fontsize=11)
     
-    # Ensure x-axis only shows integers
     plt.xticks(range(min_len, max_len + 1))
     plt.grid(axis='y', linestyle='--', alpha=0.7)
     
