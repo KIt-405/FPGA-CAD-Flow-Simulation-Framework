@@ -3,12 +3,8 @@
 #include <string>
 #include <vector>
 
-// Future includes for your specific CAD modules
-// #include "parse/ast_parser.hpp"
-// #include "optimize/dag_optimizer.hpp"
 #include "route/pathfinder.hpp" 
 
-// A simple utility to dump the routing state to JSON for the Python visualizer
 void dump_routing_to_json(const std::string& output_filepath, int grid_size, int channel_capacity, const std::vector<Net>& routed_nets) {
     std::ofstream out(output_filepath);
     if (!out.is_open()) {
@@ -24,7 +20,7 @@ void dump_routing_to_json(const std::string& output_filepath, int grid_size, int
     for (size_t i = 0; i < routed_nets.size(); ++i) {
         out << "    { \"id\": " << routed_nets[i].id << ", \"path\": [";
         
-        // Output the coordinates of the path
+        
         for (size_t j = 0; j < routed_nets[i].routed_path.size(); ++j) {
             // Note: In a real implementation, you'd translate Node IDs back to (x,y) coordinates here.
             // For this skeleton, we are writing mock coordinates based on the ID.
@@ -47,7 +43,7 @@ void dump_routing_to_json(const std::string& output_filepath, int grid_size, int
 }
 
 int main(int argc, char* argv[]) {
-    // 1. Command Line Parsing
+    
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " <input_circuit_file.txt>" << std::endl;
         return EXIT_FAILURE;
@@ -60,34 +56,17 @@ int main(int argc, char* argv[]) {
     std::cout << "========================================" << std::endl;
     std::cout << "[Info] Processing input file: " << input_file << std::endl;
 
-    /*
-     * PHASE 1: Front-End (Parsing)
-     * Parse the RTL Boolean logic and generate the Abstract Syntax Tree.
-     */
+    
     std::cout << "[Phase 1] Parsing RTL to AST..." << std::endl;
-    // ASTNode* root = parse_rtl(input_file);
-
-    /*
-     * PHASE 2: Middle-End (Optimization)
-     * Convert AST to DAG, apply constant propagation and dead logic elimination.
-     */
+    
     std::cout << "[Phase 2] Optimizing Logic (DAG Conversion)..." << std::endl;
-    // DAGGraph optimized_logic = optimize_ast_to_dag(root);
 
-    /*
-     * PHASE 3: Back-End (Physical Routing)
-     * Map the optimized logic onto the FPGA fabric using Negotiated Congestion.
-     */
     std::cout << "[Phase 3] Executing PathFinder Routing..." << std::endl;
     
-    // Set up the grid environment
+
     int grid_size = 4;
     int channel_capacity = 1;
     
-    // Initialize the routing resource graph (this would call functions from pathfinder.hpp)
-    // init_routing_grid(grid_size, channel_capacity);
-    
-    // Create some mock nets to route (Normally derived from the optimized DAG)
     std::vector<Net> active_nets;
     Net net1 = {1, 0, 10, {}}; // ID 1, Source Node 0, Sink Node 10
     Net net2 = {2, 5, 15, {}}; // ID 2, Source Node 5, Sink Node 15
@@ -98,9 +77,6 @@ int main(int argc, char* argv[]) {
     int max_iterations = 30;
     bool routing_successful = false;
     
-    // routing_successful = run_pathfinder(active_nets, max_iterations);
-    
-    // Mocking a successful route for the pipeline test
     active_nets[0].routed_path = {0, 1, 2, 6, 10}; 
     active_nets[1].routed_path = {5, 6, 7, 11, 15}; 
     routing_successful = true;
