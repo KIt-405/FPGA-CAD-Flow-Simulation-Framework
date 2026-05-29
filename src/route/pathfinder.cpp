@@ -5,10 +5,9 @@
 #include <algorithm>
 #include <limits>
 
-// Define the global routing graph declared in the header
+
 std::unordered_map<int, RRGNode> routing_grid;
 
-// Helper: Calculate Manhattan distance for A* Heuristic
 double manhattan_distance(int node_a, int node_b, int grid_size) {
     int x1 = node_a % grid_size;
     int y1 = node_a / grid_size;
@@ -32,7 +31,6 @@ void init_routing_grid(int grid_size, int channel_capacity) {
             node.pres_fac = 1.0;
             node.hist_fac = 1.0;
             
-            // Connect to neighbors (North, South, East, West) to build the fabric
             if (x > 0) node.edges.push_back(y * grid_size + (x - 1)); // West
             if (x < grid_size - 1) node.edges.push_back(y * grid_size + (x + 1)); // East
             if (y > 0) node.edges.push_back((y - 1) * grid_size + x); // North
@@ -45,7 +43,6 @@ void init_routing_grid(int grid_size, int channel_capacity) {
               << " FPGA fabric with capacity " << channel_capacity << " per track.\n";
 }
 
-// Priority Queue element for A* Search
 struct PQElement {
     int node_id;
     double cost_from_start;
