@@ -73,7 +73,6 @@ int main(int argc, char* argv[]) {
     active_nets.push_back(net1);
     active_nets.push_back(net2);
 
-    // Run the negotiated congestion algorithm
     int max_iterations = 30;
     bool routing_successful = false;
     
@@ -87,10 +86,6 @@ int main(int argc, char* argv[]) {
         std::cout << "[Warning] Routing failed to resolve all congestion after " << max_iterations << " iterations." << std::endl;
     }
 
-    /*
-     * PHASE 4: Output Generation
-     * Dump the state so Python can visualize the results.
-     */
     dump_routing_to_json(output_file, grid_size, channel_capacity, active_nets);
 
     std::cout << "========================================" << std::endl;
