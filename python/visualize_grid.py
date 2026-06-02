@@ -20,7 +20,6 @@ def visualize_fpga_routing(json_filepath):
 
     fig, ax = plt.subplots(figsize=(10, 10))
     
-    # 1. Render Configurable Logic Blocks (CLBs)
     for x in range(grid_size):
         for y in range(grid_size):
             # CLBs occupy discrete coordinates; routing tracks run between them
@@ -31,7 +30,6 @@ def visualize_fpga_routing(json_filepath):
             ax.add_patch(clb_rect)
             ax.text(x + 0.5, y + 0.5, f"CLB\n({x},{y})", ha='center', va='center', fontsize=9, fontweight='bold')
 
-    # 2. Track Wire Usage and Detect Over-Capacity (Congestion)
     wire_occupancy = {}
     for net in nets:
         path = net.get("path", [])
@@ -41,7 +39,6 @@ def visualize_fpga_routing(json_filepath):
             segment = tuple(sorted([seg_start, seg_end]))
             wire_occupancy[segment] = wire_occupancy.get(segment, 0) + 1
 
-    # 3. Plot Wire Routing Paths
     colors = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b']
     
     for idx, net in enumerate(nets):
@@ -60,16 +57,13 @@ def visualize_fpga_routing(json_filepath):
         ax.scatter(x_coords[0], y_coords[0], marker='^', s=150, color='forestgreen', edgecolor='black', zorder=5)
         ax.scatter(x_coords[-1], y_coords[-1], marker='o', s=150, color='firebrick', edgecolor='black', zorder=5)
 
-    # 4. Highlight Congestion Hotspots (Where occupancy exceeds channel capacity)
     for segment, occupancy in wire_occupancy.items():
         if occupancy > channel_capacity:
             p1, p2 = segment
-            # Overlay a highly visible thick marker representing a short circuit
             ax.plot(
                 [p1[0] + 0.5, p2[0] + 0.5], [p1[1] + 0.5, p2[1] + 0.5],
                 color='crimson', linestyle='--', linewidth=6, zorder=4
             )
-            # Add text indicator for the amount of illegal sharing
             mid_x = (p1[0] + p2[0]) / 2 + 0.5
             mid_y = (p1[1] + p2[1]) / 2 + 0.5
             ax.text(mid_x, mid_y, f"! {occupancy}/{channel_capacity}", color='white', 
