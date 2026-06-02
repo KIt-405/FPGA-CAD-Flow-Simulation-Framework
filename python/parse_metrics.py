@@ -23,7 +23,6 @@ def analyze_metrics(json_filepath):
         print("No nets found in the routing state.")
         return
 
-    # 1. Calculate Wirelengths
     wirelengths = []
     wire_usage = Counter()
 
@@ -33,7 +32,6 @@ def analyze_metrics(json_filepath):
         length = len(path) - 1 if len(path) > 0 else 0
         wirelengths.append(length)
 
-        # Track usage for congestion metrics
         for i in range(len(path) - 1):
             seg_start = tuple(path[i])
             seg_end = tuple(path[i+1])
@@ -41,17 +39,14 @@ def analyze_metrics(json_filepath):
             segment = tuple(sorted([seg_start, seg_end]))
             wire_usage[segment] += 1
 
-    # 2. Derive Statistical Metrics
     total_wirelength = sum(wirelengths)
     max_wirelength = max(wirelengths) if wirelengths else 0
     avg_wirelength = total_wirelength / total_nets if total_nets else 0
 
-    # 3. Derive Congestion Metrics
     total_segments_used = len(wire_usage)
     over_capacity_segments = sum(1 for count in wire_usage.values() if count > channel_capacity)
     peak_congestion = max(wire_usage.values()) if wire_usage else 0
 
-    # 4. Print Terminal Report
     print("="*45)
     print("  FPGA CAD ROUTING METRICS REPORT")
     print("="*45)
@@ -72,7 +67,6 @@ def analyze_metrics(json_filepath):
         print(" ROUTING FEASIBLE: 0 conflicts detected (100% Legal).")
     print("="*45)
 
-    # 5. Visualize Wirelength Distribution
     plot_wirelength_histogram(wirelengths)
 
 def plot_wirelength_histogram(wirelengths):
